@@ -35,7 +35,33 @@ def get_indian_time():
     tz = pytz.timezone("Asia/Kolkata")
     return datetime.now(tz).strftime("%d-%m-%Y %H:%M:%S")
 
+@app.route("/")
+def index():
+    user = session.get("user")
+    return render_template("index.html", user=user, indian_time=get_indian_time())
 
+@app.route("/login")
+def login():
+    redirect_uri = url_for("authorize", _external=True)
+    return oauth.google.authorize_redirect(redirect_uri)
+
+@app.route("/authorize")
+def authorize():
+    token = oauth.google.authorize_access_token()
+    if token is None:
+        flash("Authorization failed.")
+        return redirect(url_for("index"))
+    
+    userinfo = oauth.google.parse_id_token(token)
+    if not userinfo:
+        userinfo = oauth.google.get("userinfo").json()
+
+    session["user"] = {
+        "name": userinfo.get("name"),
+        "email": userinfo.get("email"),
+        "picture": userinfo.get("picture"),
+    }
+    return redirect(url_for("profile"))
 
 # run app
 if __name__ == "__main__":
