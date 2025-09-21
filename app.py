@@ -92,7 +92,43 @@ def logout():
     return redirect(url_for("index"))
 
 def generate_design(n):
-    pass
+    lines = []
+    mid = (n + 1) // 2
+
+    # upper half
+    for i in range(1, mid + 1):
+        stars = 2 * i - 1
+        outer_spaces = mid - i
+        if stars == 1:
+            line = " " * outer_spaces + "*"
+        else:
+            # hollow effect
+            line = " " * outer_spaces + "*" + " " * (stars - 2) + "*"
+        lines.append(line)
+
+    # lower half
+    # if n is odd, we must not duplicate the middle line
+    start = mid + 1 if n % 2 == 1 else mid
+    for j, i in enumerate(range(start, n + 1), start=1):
+        # mirror index
+        mirror_i = mid - j
+        if mirror_i <= 0:
+            mirror_i = 1
+        stars = 2 * mirror_i - 1
+        outer_spaces = mid - mirror_i
+        if stars == 1:
+            line = " " * outer_spaces + "*"
+        else:
+            line = " " * outer_spaces + "*" + " " * (stars - 2) + "*"
+        lines.append(line)
+
+    # Add a vertical centered caption for aesthetics:
+    caption = f" Signed in as {session['user'].get('name')} ({session['user'].get('email')}) "
+    caption_line = caption.center(max(len(x) for x in lines))
+    lines.append("")
+    lines.append(caption_line)
+    
+    return "\n".join(lines)
 
 # run app
 if __name__ == "__main__":
