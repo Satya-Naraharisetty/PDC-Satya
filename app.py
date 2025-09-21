@@ -63,6 +63,12 @@ def authorize():
     }
     return redirect(url_for("profile"))
 
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    flash("You have been signed out.")
+    return redirect(url_for("index"))
+
 # run app
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
