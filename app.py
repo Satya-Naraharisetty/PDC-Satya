@@ -31,6 +31,12 @@ oauth.register(
     client_kwargs={"scope": "openid email profile"},
 )
 
+def get_indian_time():
+    tz = pytz.timezone("Asia/Kolkata")
+    return datetime.now(tz).strftime("%d-%m-%Y %H:%M:%S")
+
+
+
 # run app
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
