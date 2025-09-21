@@ -15,7 +15,8 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY")
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
-
+if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
+    print("Warning: GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET not set. Create credentials and set them as env vars.")
 
 oauth = OAuth(app)
 oauth.register(
