@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+  <div>
+    <h3>Hello, {{ user.name }}&nbsp;<span><a href="{{ url_for('logout') }}" style="color: rgb(0, 174, 255);">[Sign out]</a> </span></h3>
+    <p>you are signed in with the email <strong>{{ user.email }}</strong></p>
+    <p>Current Indian Time: <strong id="indian-time"></strong></p>
+
+    <hr>
+
+    <h4>Printing Design (Phase 2 beginner)</h4>
+    <form method="post">
+      <label for="lines">Number of Lines (1 - 100)</label><br>
+      <input id="lines" name="lines" type="number" min="1" max="100" required value="16" style="padding:8px; margin-top:6px;">
+      <button type="submit" class="btn btn-primary">Display</button>
+    </form>
+
+    {% if pattern_output %}
+      <h5>Design Output:</h5>
+      <pre>{{ pattern_output }}</pre>
+    {% endif %}
+  </div>
+  <script>
+    function updateIndianTime() {
+      const now = new Date().toLocaleString("en-GB", { timeZone: "Asia/Kolkata" });
+      const [date, time] = now.split(", ");
+      document.getElementById("indian-time").textContent = `${date} ${time}`;
+    }
+
+    updateIndianTime();
+    setInterval(updateIndianTime, 1000);
+  </script>
+{% endblock %}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>PDC - Flask Google Auth</title>
+    <style>
+      body { font-family: Inter, Roboto, Arial, sans-serif; padding: 20px; background:#f7f9fc; color:#222;}
+      .card { background: white; padding:18px; border-radius:10px; box-shadow:0 6px 18px rgba(20,20,40,0.06); max-width:900px; margin:20px auto;}
+      header { display:flex; justify-content:space-between; align-items:center; gap: 16px; }
+      .btn { display:inline-block; padding:8px 12px; border-radius:8px; text-decoration:none; border: none; cursor:pointer;}
+      .btn-primary { background:#2563eb; color:#fff;}
+      .btn-ghost { background:transparent; color:#2563eb; border:1px solid #cfe0ff;}
+      pre { background:#0b1220; color:#cde; padding:12px; border-radius:8px; overflow:auto; }
+      .muted { color:#666; font-size:0.9rem; }
+      .flash { color: #b71c1c; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <header>
+        <div>
+          <h2>Satya's Flask Google Auth</h2>
+          <div class="muted">sign in with Google to see Indian time and print a pattern</div>
+        </div>
+        <div>
+          {% if user %}
+            <div style="text-align:right;">
+              <div>{{ user.name }}<br><small class="muted">{{ user.email }}</small></div>
+              <!-- <a href="{{ url_for('logout') }}" class="btn btn-ghost" style="margin-top:8px;">Sign out</a> -->
+            </div>
+          {% endif %}
+        </div>
+      </header>
+      <hr>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash">
+            {% for m in messages %}{{ m }}{% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>
