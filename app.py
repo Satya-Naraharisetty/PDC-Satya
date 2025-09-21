@@ -115,45 +115,40 @@ def logout():
     flash("You have been signed out.")
     return redirect(url_for("index"))
 
-def generate_design(n):
-    pass
-    # lines = []
-    # mid = (n + 1) // 2
+def generate_design(num_lines: int) -> str:
+    """Generate diamond pattern with 'FORMULAQSOLUTIONS'."""
+    # Validate
+    if not 1 <= num_lines <= 100:
+        return "Error: Input must be between 1 and 100."
 
-    # # upper half
-    # for i in range(1, mid + 1):
-    #     stars = 2 * i - 1
-    #     outer_spaces = mid - i
-    #     if stars == 1:
-    #         line = " " * outer_spaces + "*"
-    #     else:
-    #         # hollow effect
-    #         line = " " * outer_spaces + "*" + " " * (stars - 2) + "*"
-    #     lines.append(line)
+    if num_lines % 2 == 0:
+        print(f"Input is an even number ({num_lines}). Creating a pattern for the next odd number: {num_lines + 1}.")
+        num_lines += 1
 
-    # # lower half
-    # # if n is odd, we must not duplicate the middle line
-    # start = mid + 1 if n % 2 == 1 else mid
-    # for j, i in enumerate(range(start, n + 1), start=1):
-    #     # mirror index
-    #     mirror_i = mid - j
-    #     if mirror_i <= 0:
-    #         mirror_i = 1
-    #     stars = 2 * mirror_i - 1
-    #     outer_spaces = mid - mirror_i
-    #     if stars == 1:
-    #         line = " " * outer_spaces + "*"
-    #     else:
-    #         line = " " * outer_spaces + "*" + " " * (stars - 2) + "*"
-    #     lines.append(line)
+    source_text = "FORMULAQSOLUTIONS"
+    n_text = len(source_text)
+    mid_point = num_lines // 2
 
-    # # Add a vertical centered caption for aesthetics:
-    # caption = f" Signed in as {session['user'].get('name')} ({session['user'].get('email')}) "
-    # caption_line = caption.center(max(len(x) for x in lines))
-    # lines.append("")
-    # lines.append(caption_line)
+    lines = []
+
+    # Upper half
+    for i in range(mid_point + 1):
+        length = 2 * i + 1
+        num_spaces = (num_lines - length) // 2
+        start_index = i % n_text
+        substring = "".join(source_text[(start_index + j) % n_text] for j in range(length))
+        lines.append(" " * num_spaces + substring)
+
+    # Lower half
+    for i in range(1, mid_point + 1):
+        length = num_lines - 2 * i
+        num_spaces = (num_lines - length) // 2
+        start_index = (mid_point + i) % n_text
+        substring = "".join(source_text[(start_index + j) % n_text] for j in range(length))
+        lines.append(" " * num_spaces + substring)
+
+    return "\n".join(lines)
     
-    # return "\n".join(lines)
 
 # run app
 if __name__ == "__main__":
