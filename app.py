@@ -63,11 +63,36 @@ def authorize():
     }
     return redirect(url_for("profile"))
 
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
+    user = session.get("user")
+    if not user:
+        return redirect(url_for("index"))
+
+    pattern_output = None
+    if request.method == "POST":
+        try:
+            n = int(request.form.get("lines", "0"))
+        except ValueError:
+            flash("Please enter a valid integer.")
+            return redirect(url_for("profile"))
+
+        if n <= 0 or n > 100:
+            flash("Please enter a number between 1 and 100.")
+            return redirect(url_for("profile"))
+
+        pattern_output = generate_design(n)
+
+    return render_template("profile.html", user=user, indian_time=get_indian_time(), pattern_output=pattern_output)
+
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     flash("You have been signed out.")
     return redirect(url_for("index"))
+
+def generate_design(n):
+    pass
 
 # run app
 if __name__ == "__main__":
